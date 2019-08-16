@@ -1,0 +1,19 @@
+{
+  "name": "new-times",
+  "version": "1.0.0",
+  "description": "News stories from The New York Times tailored to evolve with you as your interests do.  While recommending others that will help broaden your horizons.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brock8w/new-times.git"
+  },
+  "author": "Bob Rock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brock8w/new-times/issues"
+  },
+  "homepage": "https://github.com/brock8w/new-times#readme"
+}
