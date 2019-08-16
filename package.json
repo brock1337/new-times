@@ -4,7 +4,9 @@
   "description": "News stories from The New York Times tailored to evolve with you as your interests do.  While recommending others that will help broaden your horizons.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --help",
+    "start": "NODE_ENV=development babel-watch --watch src src/server/index.js",
+    "test": "NODE_ENV=test echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,30 @@
   "bugs": {
     "url": "https://github.com/brock8w/new-times/issues"
   },
-  "homepage": "https://github.com/brock8w/new-times#readme"
+  "homepage": "https://github.com/brock8w/new-times#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@koa/cors": "^3.0.0",
+    "core-js": "^3.2.1",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^7.4.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-async-to-generator": "^7.5.0",
+    "@babel/plugin-transform-regenerator": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-plugin-istanbul": "^5.2.0",
+    "babel-watch": "^7.0.0",
+    "eslint": "^6.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0"
+  }
 }
