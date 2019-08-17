@@ -1,0 +1,503 @@
+---
+swagger: "2.0"
+basePath: "/svc/community/v3"
+host: "api.nytimes.com"
+schemes:
+- "https"
+info:
+  version: "3.0.0"
+  title: "Community API"
+  description: "Get comments from registered users on New York Times articles.\nNOTE:\
+    \ The Community API is beta.\n\n# The Community API v3 (Beta)\n\nWith the Community\
+    \ API, you can get readers' article comments.\n\n```\nhttps://api.nytimes.com/svc/community/v3/user-content/url.json?api-key=your-key&offset=0&url=https%3A%2F%2Fwww.nytimes.com%2F2019%2F06%2F21%2Fscience%2Fgiant-squid-cephalopod-video.html\n\
+    ```\n\n## The Community API at a Glance\n\n### Base URI\n\n```\nhttps://api.nytimes.com/svc/community/v3\n\
+    ```\n\n### Scope\n\nNYTimes.com user-generated content, currently comments on\
+    \ articles.\n\n### HTTP method\n\nGET\n\n### Response formats\n\nJSON\n\nTo use\
+    \ the Community API, you must [sign up for an API key](</get-started>). Usage\
+    \ is limited to 4,000 requests per day and 10 requests per minute (rate limits\
+    \ are subject to change). Please read and agree to the [API Terms of Use](</terms>)\
+    \ and the [Attribution Guidelines](</branding>) before you proceed.\n\n\n## Pagination\n\
+    \nUse the offset query parameter to paginate thru the results, 25 comments at\
+    \ a time.  Use offset=0 to get the first 25 comments, offset=25 to get the next\
+    \ 25 comments, ...\nThe totalParentCommentsFound field has the total number of\
+    \ top-level comments.  Use that to determine how many comments you need to paginate\
+    \ thru.\n\n## Responses\n\nThe Community API is RESTful.  It uses response codes\
+    \ to indicate API status (200 - OK, 401 - invalid key, 429 - rate limit reached,\
+    \ ...).\n\n### Data Returned\n\n* Date fields are in [Unix/UTC format](<https://en.wikipedia.org/wiki/Unix_time>).\n"
+paths:
+  /user-content/replies.json:
+    parameters: []
+    get:
+      summary: "Get replies to a comment."
+      description: "Get replies to a comment.  You need to pass in the article's URL\
+        \ and the comment sequence number of the parent comment.\n\n```\nhttps://api.nytimes.com/svc/community/v3/user-content/replies.json?api-key={your-API-key}&url={url}&commentSequence={sequence}[&offset=int]\n\
+        ```\n\n```\nhttps://api.nytimes.com/svc/community/v3/user-content/replies.json?api-key=your-key&offset=0&url=https://www.nytimes.com/interactive/2019/04/30/dining/climate-change-food-eating-habits.html&commentSequence=100268335\n\
+        ```\n\nThe response includes the parent comment and up to 25 replies.  The\
+        \ replyCount field has the total number of replies.\nUse offset query parameter\
+        \ to paginate thru results, 25 replies at a time (0,25,50, ...).\n"
+      operationId: "GET_user-content-replies-json"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "url"
+        in: "query"
+        description: "Article URL to get comments for."
+        required: true
+        type: "string"
+      - name: "commentSequence"
+        in: "query"
+        description: "Parent comment sequence number."
+        required: true
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Sets starting point of result set (0, 25, 50, ...). Used to\
+          \ paginate thru replies. Defaults to 0. The replyCount field indicates how\
+          \ many replies there are for the parent comment."
+        required: false
+        type: "integer"
+        default: 0
+        multipleOf: 25
+      responses:
+        200:
+          description: ""
+          schema:
+            type: "object"
+            properties:
+              debug:
+                type: "object"
+                properties:
+                  version:
+                    type: "number"
+              status:
+                type: "string"
+              copyright:
+                type: "string"
+              results:
+                type: "object"
+                properties:
+                  comments:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        commentID:
+                          type: "integer"
+                        status:
+                          type: "string"
+                        commentSequence:
+                          type: "integer"
+                        userID:
+                          type: "integer"
+                        userDisplayName:
+                          type: "string"
+                        userLocation:
+                          type: "string"
+                        userTitle:
+                          type: "null"
+                        userURL:
+                          type: "null"
+                        commentTitle:
+                          type: "string"
+                        commentBody:
+                          type: "string"
+                        createDate:
+                          type: "string"
+                        updateDate:
+                          type: "string"
+                        approveDate:
+                          type: "string"
+                        recommendations:
+                          type: "integer"
+                        replyCount:
+                          type: "integer"
+                          description: "Total number of replies."
+                        replies:
+                          type: "array"
+                          items: {}
+                        editorsSelection:
+                          type: "boolean"
+                        parentID:
+                          type: "null"
+                        parentUserDisplayName:
+                          type: "null"
+                        depth:
+                          type: "integer"
+                        commentType:
+                          type: "string"
+                        trusted:
+                          type: "integer"
+                        recommendedFlag:
+                          type: "null"
+                        reportAbuseFlag:
+                          type: "null"
+                        permID:
+                          type: "string"
+                        picURL:
+                          type: "string"
+                        timespeople:
+                          type: "integer"
+                        sharing:
+                          type: "integer"
+                  page:
+                    type: "integer"
+                  totalCommentsReturned:
+                    type: "integer"
+                  totalCommentsFound:
+                    type: "integer"
+                  totalParentCommentsFound:
+                    type: "integer"
+                    description: "Total number of parent comments."
+                  totalParentCommentsReturned:
+                    type: "integer"
+                  totalReplyCommentsFound:
+                    type: "integer"
+                  totalReplyCommentsReturned:
+                    type: "integer"
+                  totalReporterReplyCommentsFound:
+                    type: "integer"
+                  totalReporterReplyCommentsReturned:
+                    type: "integer"
+                  totalEditorsSelectionFound:
+                    type: "integer"
+                  totalEditorsSelectionReturned:
+                    type: "integer"
+                  totalRecommendationsFound:
+                    type: "integer"
+                  totalRecommendationsReturned:
+                    type: "integer"
+                  replyLimit:
+                    type: "integer"
+                  depthLimit:
+                    type: "integer"
+                  sort:
+                    type: "string"
+                  filter:
+                    type: "string"
+                  callerID:
+                    type: "null"
+                  api_timestamp:
+                    type: "string"
+          examples:
+            application/json:
+              debug:
+                version: 3.1
+              status: "OK"
+              copyright: "Copyright (c) 2019 The New York Times Company.  All Rights\
+                \ Reserved."
+              results:
+                comments:
+                - commentID: 20831
+                  status: "approved"
+                  commentSequence: 138
+                  userID: 44150303
+                  userDisplayName: "byakushi"
+                  userLocation: "US"
+                  userTitle: null
+                  userURL: null
+                  commentTitle: ""
+                  commentBody: "I have always wondered how much energy US would save\
+                    \ if it shut down Vegas? Can you imagine the amount of electricity\
+                    \ consumed on the strip, the ice melted for its water supply -\
+                    \ all in the name of gambling? That's the kind of consumerism\
+                    \ I would like to see halted. Same goes for all the downtown skylines\
+                    \ which cause so much light pollution. Even a simple thing like\
+                    \ having an \"off\" switch in the homes rather than just power\
+                    \ outlets would save a lot of energy and hopefully make a huge\
+                    \ difference in the \"consumption footprint.\" Can American live\
+                    \ with that?<br/><br/>As for the growing economies of China &\
+                    \ India: the increased industrialization has also increased environmental\
+                    \ pollution in those countries. West has conveniently handed down\
+                    \ it's dirty work to them. And at the same time we have Americans\
+                    \ screaming about lost jobs. When will they realize that they\
+                    \ can't have it both ways?<br/><br/>All in all they are acting\
+                    \ like spoilt brats who have realized that they are no longer\
+                    \ the teacher's favorite. Is it surprising that other folks hate\
+                    \ you for your spoilt ways, at the same time envying how you have\
+                    \ it so easy?<br/><br/>"
+                  createDate: "1199309173"
+                  updateDate: "1199322293"
+                  approveDate: "1199322293"
+                  recommendations: 5
+                  replyCount: 0
+                  replies: []
+                  editorsSelection: false
+                  parentID: null
+                  parentUserDisplayName: null
+                  depth: 1
+                  commentType: "comment"
+                  trusted: 0
+                  recommendedFlag: null
+                  reportAbuseFlag: null
+                  permID: "138"
+                  picURL: "https://graphics8.nytimes.com/images/apps/timespeople/none.png"
+                  timespeople: 1
+                  sharing: 0
+                page: 1
+                totalCommentsReturned: 25
+                totalCommentsFound: 138
+                totalParentCommentsFound: 138
+                totalParentCommentsReturned: 25
+                totalReplyCommentsFound: 0
+                totalReplyCommentsReturned: 0
+                totalReporterReplyCommentsFound: 0
+                totalReporterReplyCommentsReturned: 0
+                totalEditorsSelectionFound: 13
+                totalEditorsSelectionReturned: 1
+                totalRecommendationsFound: 118
+                totalRecommendationsReturned: 23
+                replyLimit: 3
+                depthLimit: 0
+                sort: "oldest"
+                filter: ""
+                callerID: null
+                api_timestamp: "1455718117"
+        401:
+          description: "Unauthorized request.  Make sure api-key is set."
+        429:
+          description: "Too many requests.  You reached your per minute or per day\
+            \ rate limit."
+      security:
+      - api-key: []
+  /user-content/url.json:
+    parameters: []
+    get:
+      summary: "Get top-level comments for URL."
+      description: "Get top-level comments associated with a specific NYTimes.com\
+        \ URL.\n\n```\nhttps://api.nytimes.com/svc/community/v3/user-content/url.json?api-key={your-API-key}&url={url}[&offset=int]\n\
+        ```\n\n```\nhttps://api.nytimes.com/svc/community/v3/user-content/url.json?api-key=your-key&offset=0&url=https://www.nytimes.com/interactive/2019/04/30/dining/climate-change-food-eating-habits.html\n\
+        ```\n\nThe response includes 25 top-level comments at a time.  Use offset\
+        \ query parameter to paginate thru results (0,25,50, ...).  The total number\
+        \ of top-level comments is returned in the totalParentCommentsFound field.\n\
+        The response includes up to 3 replies.  If there are more that 3 replies for\
+        \ a top-level comment, use the replies endpoint to get the rest.  The replyCount\
+        \ field has the total number of replies.\n"
+      operationId: "GET_user-content-url-json"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "url"
+        in: "query"
+        description: "Article URL to get comments for."
+        required: true
+        type: "string"
+      - name: "offset"
+        in: "query"
+        description: "Sets starting point of result set (0, 25, 50, ...). Used to\
+          \ paginate thru top-level article comments. Defaults to 0. The totalParentCommentsFound\
+          \ field indicates how many top-level comments there are."
+        required: false
+        type: "integer"
+        default: 0
+        multipleOf: 25
+      responses:
+        200:
+          description: ""
+          schema:
+            type: "object"
+            properties:
+              debug:
+                type: "object"
+                properties:
+                  version:
+                    type: "number"
+              status:
+                type: "string"
+              copyright:
+                type: "string"
+              results:
+                type: "object"
+                properties:
+                  comments:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        commentID:
+                          type: "integer"
+                        status:
+                          type: "string"
+                        commentSequence:
+                          type: "integer"
+                        userID:
+                          type: "integer"
+                        userDisplayName:
+                          type: "string"
+                        userLocation:
+                          type: "string"
+                        userTitle:
+                          type: "null"
+                        userURL:
+                          type: "null"
+                        commentTitle:
+                          type: "string"
+                        commentBody:
+                          type: "string"
+                        createDate:
+                          type: "string"
+                        updateDate:
+                          type: "string"
+                        approveDate:
+                          type: "string"
+                        recommendations:
+                          type: "integer"
+                        replyCount:
+                          type: "integer"
+                          description: "Total number of replies."
+                        replies:
+                          type: "array"
+                          items: {}
+                        editorsSelection:
+                          type: "boolean"
+                        parentID:
+                          type: "null"
+                        parentUserDisplayName:
+                          type: "null"
+                        depth:
+                          type: "integer"
+                        commentType:
+                          type: "string"
+                        trusted:
+                          type: "integer"
+                        recommendedFlag:
+                          type: "null"
+                        reportAbuseFlag:
+                          type: "null"
+                        permID:
+                          type: "string"
+                        picURL:
+                          type: "string"
+                        timespeople:
+                          type: "integer"
+                        sharing:
+                          type: "integer"
+                  page:
+                    type: "integer"
+                  totalCommentsReturned:
+                    type: "integer"
+                  totalCommentsFound:
+                    type: "integer"
+                  totalParentCommentsFound:
+                    type: "integer"
+                    description: "Total number of parent comments."
+                  totalParentCommentsReturned:
+                    type: "integer"
+                  totalReplyCommentsFound:
+                    type: "integer"
+                  totalReplyCommentsReturned:
+                    type: "integer"
+                  totalReporterReplyCommentsFound:
+                    type: "integer"
+                  totalReporterReplyCommentsReturned:
+                    type: "integer"
+                  totalEditorsSelectionFound:
+                    type: "integer"
+                  totalEditorsSelectionReturned:
+                    type: "integer"
+                  totalRecommendationsFound:
+                    type: "integer"
+                  totalRecommendationsReturned:
+                    type: "integer"
+                  replyLimit:
+                    type: "integer"
+                  depthLimit:
+                    type: "integer"
+                  sort:
+                    type: "string"
+                  filter:
+                    type: "string"
+                  callerID:
+                    type: "null"
+                  api_timestamp:
+                    type: "string"
+          examples:
+            application/json:
+              debug:
+                version: 3.1
+              status: "OK"
+              copyright: "Copyright (c) 2019 The New York Times Company.  All Rights\
+                \ Reserved."
+              results:
+                comments:
+                - commentID: 20831
+                  status: "approved"
+                  commentSequence: 138
+                  userID: 44150303
+                  userDisplayName: "byakushi"
+                  userLocation: "US"
+                  userTitle: null
+                  userURL: null
+                  commentTitle: ""
+                  commentBody: "I have always wondered how much energy US would save\
+                    \ if it shut down Vegas? Can you imagine the amount of electricity\
+                    \ consumed on the strip, the ice melted for its water supply -\
+                    \ all in the name of gambling? That's the kind of consumerism\
+                    \ I would like to see halted. Same goes for all the downtown skylines\
+                    \ which cause so much light pollution. Even a simple thing like\
+                    \ having an \"off\" switch in the homes rather than just power\
+                    \ outlets would save a lot of energy and hopefully make a huge\
+                    \ difference in the \"consumption footprint.\" Can American live\
+                    \ with that?<br/><br/>As for the growing economies of China &\
+                    \ India: the increased industrialization has also increased environmental\
+                    \ pollution in those countries. West has conveniently handed down\
+                    \ it's dirty work to them. And at the same time we have Americans\
+                    \ screaming about lost jobs. When will they realize that they\
+                    \ can't have it both ways?<br/><br/>All in all they are acting\
+                    \ like spoilt brats who have realized that they are no longer\
+                    \ the teacher's favorite. Is it surprising that other folks hate\
+                    \ you for your spoilt ways, at the same time envying how you have\
+                    \ it so easy?<br/><br/>"
+                  createDate: "1199309173"
+                  updateDate: "1199322293"
+                  approveDate: "1199322293"
+                  recommendations: 5
+                  replyCount: 0
+                  replies: []
+                  editorsSelection: false
+                  parentID: null
+                  parentUserDisplayName: null
+                  depth: 1
+                  commentType: "comment"
+                  trusted: 0
+                  recommendedFlag: null
+                  reportAbuseFlag: null
+                  permID: "138"
+                  picURL: "https://graphics8.nytimes.com/images/apps/timespeople/none.png"
+                  timespeople: 1
+                  sharing: 0
+                page: 1
+                totalCommentsReturned: 25
+                totalCommentsFound: 138
+                totalParentCommentsFound: 138
+                totalParentCommentsReturned: 25
+                totalReplyCommentsFound: 0
+                totalReplyCommentsReturned: 0
+                totalReporterReplyCommentsFound: 0
+                totalReporterReplyCommentsReturned: 0
+                totalEditorsSelectionFound: 13
+                totalEditorsSelectionReturned: 1
+                totalRecommendationsFound: 118
+                totalRecommendationsReturned: 23
+                replyLimit: 3
+                depthLimit: 0
+                sort: "oldest"
+                filter: ""
+                callerID: null
+                api_timestamp: "1455718117"
+        401:
+          description: "Unauthorized request.  Make sure api-key is set."
+        429:
+          description: "Too many requests.  You reached your per minute or per day\
+            \ rate limit."
+      security:
+      - api-key: []
+definitions: {}
+securityDefinitions:
+  api-key:
+    name: "api-key"
+    type: "apiKey"
+    in: "query"
